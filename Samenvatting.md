@@ -2,7 +2,7 @@
 
 | Inhoud |
 |:---|
-|[1. Zoeken en sorteren](#zoeken_en_sorteren)|
+|[1. Zoeken en sorteren](#zoeken-en-sorteren)|
 |[2. Gelinkte lijsten]()|
 |[3. Hashtabellen]()|
 |[4. Bomen]()|
@@ -24,9 +24,9 @@
 
 | Inhoud |
 |:---|
-|[Zoeken in array](#zoeken_in_array)|
-|[Linear of sequentieel zoeken](#linear_of_sequentieel_zoeken)|
-|[Binair zoeken](#binair_zoeken)|
+|[Zoeken in array](#zoeken-in-array)|
+|[Linear of sequentieel zoeken](#linear-of-sequentieel-zoeken)|
+|[Binair zoeken](#binair-zoeken)|
 |[Tijdscomplexiteit]()|
 |[Sorteren door selectie]()|
 |[Sorteren door tussenvoegen]()|
