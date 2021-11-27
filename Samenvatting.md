@@ -1,4 +1,4 @@
-# CLASSIC COMPUTER SCIENCE ALGORITHMS
+# <font color=red>CLASSIC COMPUTER SCIENCE ALGORITHMS</font>
 
 | Inhoud |
 |:---|
@@ -27,11 +27,11 @@
 |[Zoeken in array](#zoeken-in-array)|
 |[Linear of sequentieel zoeken](#linear-of-sequentieel-zoeken)|
 |[Binair zoeken](#binair-zoeken)|
-|[Tijdscomplexiteit]()|
-|[Sorteren door selectie]()|
-|[Sorteren door tussenvoegen]()|
-|[Sorteren door mengen]()|
-|[Oefeningen]()|
+|[Tijdscomplexiteit](#Tijdscomplexiteit)|
+|[Sorteren door selectie](#Sorteren-door-selectie)|
+|[Sorteren door tussenvoegen](#Sorteren-door-tussenvoegen)|
+|[Sorteren door mengen](#Sorteren-door-mengen)|
+|[Oefeningen](#Oefeningen)|
 
 ## Zoeken in array
 
@@ -147,3 +147,290 @@ end function
 <br>
 
 ## Tijdscomplexiteit
+
+In cursus: focus op uitvoeringstijd. Geen exacte berekening.<br>
+
+Daarom: `Asymptotische analyse` van de uitvoeringstijd. Dit karaktteriseert het gedrag van de uitvoeringstjid voor `grote` waarden van de input. Typisch gedrag is bvb:
+- Invoer verdubbelt => uitvoeringstijd verdubbelt
+    - Lineaire functie: `T(n) = n`
+- Invoer verdubbelt => uitvoeringstijd x4
+    - Kwadratische functie; `T(n)= n^2`
+- Invoer + 1 => uitvoeringstijd x 2
+    - Exponentiele functie: `T(n) = 2^n`
+- Invoer verdubbelt => uitvoeringstijd + constante
+    - Logaritmische functie: `T(n) = log(n)`
+- ...
+
+
+Bij de analyse van de zoekalgoritmen zien we dat de asymptotischeuitvoeringstijd bepaald wordt door het aantal vergelijkingen dat wordtuitgevoerd.
+
+### Tijdscomplexiteit sequentieel zoeken
+
+Bij sequentieel zoeken kunnen we ons afvragen hoeveel keer de volgende vergelijking wordt uitgevoerd:
+
+`rij[i] != zoekItem`
+
+- Beste geval? => 1
+- Slechtste geval? => n
+- gemiddelde geval? => n / 2 dus T(n) = 0(n)
+
+We noemen dit lineare tijdscomplexiteit of tijdscomplexi van orde n
+
+### Tijdscomplexiteit binair zoeken
+
+Bij binair zoeken tellen we hoeveel keer de vergelijking
+
+`rij[m] < zoekItem`
+
+Wordt uitgevoerd. Stel: n = 2^k, met `k` een natuurlijk getal.
+- n=1, i.e. k=0 => 0 keer
+- n=2, i.e. k=1 => 1 keer
+- n=4, i.e. k=2 => 2 keer
+- n=8, i.e. k=3 => 3 keer
+
+Dus: `n=2^k <=> k = log2(n)`<br>
+Dit noemen we logaritmische tijdscomplexiteit: `T(n)=0(log2(n))`<br>
+
+## Sorteren door Selectie
+
+Basisidee:
+- Zoek het grootste element en plaats het achteraan
+- Sorteer de rest van de array
+
+<b>Invoer:</b> De array `a` is ingevuld met `n` elementen.
+<b>Uitvoer:</b> De array `a` is gesorteerd.
+```bash
+function selectionSort(a)
+    for i = n-1...1 by -1 do            # achteraan starten
+        positie <- i
+        max <- a[i]
+        for j = i -1 ... 0 by -1 do     # j doorloopt de deelrij
+            if a[j] > max then
+                positie <- j
+                max <- a[j]
+        a[positie] <- a[i]          # grootste element wisselen met laatste
+        a[i] <- max
+end function
+```
+Voorbeeld:
+
+<img src="img\SorterenDoorSelectie.png" width=400>
+
+### Complexiteitsanalyse
+
+De uitvoeringstijd wordt bepaald door het aantal keer dat de vergelijking `a[j] > max` op regel 6 uitgevoerd wordt, of het aantal keer dat de teller j wijzigt.
+
+<img src="img\ComplexiteitsanalyseSorterenSelectie.png" width=400>
+
+We besluiten : `T(n)= 0(n^2)`
+
+### Hoe werd die som bepaald?
+
+Voorbeeld: bereken: 1 + 2 + 3 +...+ 10.
+| Stijgend  | 1  | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 9  | 10 |
+|-----------|----|----|----|----|----|----|----|----|----|----|
+| Omgekeerd | 10 | 9  | 8  | 7  | 6  | 5  | 4  | 3  | 2  | 1  |
+| Som       | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 | 11 |
+
+Dus:            1+2+3+...+10 = (11*10)/2
+<br>
+Algemeen:       1+2+3+...+m = ((m+1)m)/2
+
+
+## Sorteren door tussenvoegen
+
+Basisidee:
+1. Veronderstel dat er reeds een deel vooraan de array gesorteerd is.
+2. Neem het eerste element van het niet gesorteerde deel en voeg ditelement toe op de juiste plaats in het gesorteerde deel. Op dezemanier wordt het gesorteerde deel uitgebreid.
+
+Sorteren door tussenvoegen of “card sort“ kan m.a.w. het bestvergeleken worden met het op volgorde steken van kaarten.<br>
+
+<img src="img\SorterenDoorTussenVoegen.png" width=400>
+
+<b>Invoer:</b> De array `a` is gevuld met `n` elementen.
+<b>Uitvoer:</b> De array `a` is gesorteerd.
+
+```bash
+function cardSort(a)
+    for i= 1...n-1 do
+        x <- a[i]               # x bevat het ini te voegen element
+        j <- i                      # j zoekt de juiste positie voor x
+        while j>0 and x<a[j-1] do   # schuif grotere elementen op
+            a[j] <- a[j-1]          # schuif a[j-1] eentje op
+            j <- j-1
+        a[j] <- x               # x wordt op de juiste positie tussengevoegd
+end function
+```
+
+### Complexiteitsanalyse
+
+Kwadratische tijdscomplexiteit,
+
+## Sorteren door mengen
+
+Sorteren door mengen (mergesort) is een ingewikkelder algoritme dan de voorgaande twee eenvoudige sorteeralgorimtes maar is ook een heel stuk efficienter. <br>
+
+Basisidee:
+1. Sorteer de eerste helft van de array.
+2. Sorteer de tweede helft van de array.
+3. Meng de twee gesorteerde deelrijen samen tot 1 gesorteerde array.
+
+De eerste twee stappen in dit proces gebeuren op eenrecursievemanier. Merk op dat het eigenlijk sorteren gebeurt bij het mengen vande twee gesorteerde rijen.
+
+Voorbeeld:<br>
+<img src="img\SorterenDoorMengen.png" width=400><br>
+<img src="img\SorterenDoorMengen2.png" width=400>
+
+De functie `mergeSort` roept de recursieve functie `mergeSortRecursive` aan. In deze methode wordt een deel van de rij gesorteerd door het te sortern deel op te splitsen in twee deelrijen van halve lengte.<br>
+Vervolgens worden de gesorteerde deelrijen gemengd. Het samenvoegen van de beide deelrijen gebeurt in de functie `merge`.
+
+<b>Invoer:</b> De array `a` is gevuld met `n` elementen. <br>
+<b>Uitvoer:</b> De array `a` is gesorteerd.
+```bash
+function mergeSort(a)
+    mergeSortRecursive(a,0,n -1)
+end function
+```
+
+<b>Invoer:</b> De array `a` is gevuld met `n` elementen, begin en einde wijzen naar geldige posities in de array `a`. <br>
+<b>Uitvoer:</b> De elementen met index `begin` tot en met index `einde` werden gesorteerd.
+```bash
+function mergeSortRecursive(a, begin, einde)
+    if begin < einde then
+        midden <- [(begin + einde)/2] #vloerdeling
+        mergeSortRecursive(a,begin,midden)
+        mergeSortRecursive(a, midden+1,einde)
+        merge(a,begin,midden,einde)
+end function
+```
+
+### De functie merge
+
+<b>Invoer:</b> De array𝑎is gevuld met𝑛elementen; de elementen van dedeelrij gaande van debegin-positie tot en met demidden-positie zijngesorteerd; de elementen van de deelrij gaande van de(midden+1)-positie tot en met deeind-positie zijn gesorteerd.<br>
+<b>Uitvoer:</b> De elementen met indexbegint.e.m. indexeindewerdengesorteerd.
+
+```bash
+function Merge(a,begin,midden,einde)
+    j<- begin                                           # De teller i doorloopt de linkse deelrij
+    j<- midden+1                                        # De teller j doorloopt de rechtse deelrij
+    k<- i                                               # De teller k doorloopt de hulparray hulpa
+    hulpa <- nieuwe array[n]                            # tijdelijke hulpopslag
+    while i <= midden and j <= einde do                 # totdat een deelrij leeg is
+        if a[i] <= a[j] then                            # Het kleinste element komt eerst
+            hulpa[k] <- a[i] ; i <- i + 1
+        else
+            hulpa[k] <- a[i] ; j <- j + 1
+        k <- k +1
+    if i>midden then
+        while j<= einde do
+            hulpa[k] <- a[j] ; j <- j + 1 ; k <- k+1
+    else
+        while i <= midden do
+            hulpa[k] <- a[i] ; i <- i + 1 ; k <- k+1
+    for k = begin...einde do
+        a[k] <- hulpa[k]
+end function
+```
+
+### Complexiteitsanalyse
+
+### Geheugengebruik
+
+- Mergesort is dus tijdsefficienter dan voorgaande.
+- doch minder geheugen efficient.
+- `Merge`-algoritme: extra hulprij nodig.
+
+## Oefeningen
+... zie dodona enzo
+
+# Gelinkte lijsten
+
+| Inhoud ||
+|:---|:---|
+|[Gelinkte lijsten](#Gelinkte-lijsten)||
+||[Specificatie](#Definitie)|
+||[Gelinkte lijst]()|
+||[Ankercomponenten]()|
+||[Dubbelgelinkte lijsten]()|
+|[Stapels](#Stapels)|
+||[Specificatie]()|
+||[Toepassingen van Stapels]()|
+
+## Inleiding
+
+- Array = eenvoudige datastructuur.
+- Maar wat met elementen tussenvoegen? Of verwijderen in het midden?
+- Bewerkingen hebben lineaire tijdscomplexiteit.
+- Oplossing? Gelinkte lijsten.
+- Toevoegen of verwjderen in constante tijd.
+- Opzoeken van een element bljft echter een lineare tijdscomplexiteit vertonen.
+- Nog een voordeel: aantal elementen toevoegen kan onbeperkt, geen limieten op de grootte zoals bij array.
+
+## Definitie
+
+Een gelinkte lijst bestaat uit een aantalknopendie via eenkettingstructuuraan elkaar geschakeld zijn. Een knoop bestaat uit tweevelden:
+- Een data-veld `data`
+- Een veld `volgende`
+De laatste knoop bevat een wijzernull: dit wordt grafisch voorgestelddoor een schuine streep.<br>
+Voor de eerste knoop moet een referentieeerstebijgehouden worden.In een lege lijst is de referentieeerstegelijk aan null.
+
+### Een enkelvoudige geschakelde lijst
+
+<img src="img\EnkelvoudigGeschakeldeLijst.png" width=400>
+
+### Basisbewerkingen
+
+De belangrijkste basisbewerkingen voor een enkelvoudige geschakelde lijst zijn:
+- zoek(): zoekt de positie van de knoop met als data-veld het argument.
+- verwijder(): verwijdert de knoop die volgt na de opgegeven knoop en geeft de waarde van het data-veld van de verwijderde knoop weer.
+- voegToe(): voegt een knoop toe na een opgegeven knoop, het data-veld krijgt de waarde van het tweede argument.
+
+### Klasse knoop in uml
+
+<img src="img\knoopInUml.png">
+
+De gedefinieerde knoop is een datastructuur die een element van een niet nader gedefinieerde klasse Element bevat.
+
+### Constructor van Knoop
+De constructor maakt nieuw object van klasse knoop aan.
+
+<b>Invoer:</b> / 
+<b>Uitvoer:</b> Er werd een nieuwe knoop aangemaakt.
+
+```bash
+function Knoop
+    data <- null
+    volgende <- null
+end function
+```
+
+### Implementatie Gelinte Lijst
+
+<br>
+
+### Algoritme voor de constructor
+
+De constructor GelinkteLijst maakt een nieuw object van de klasse GelinkteLijst aan.
+
+<b>Invoer:</b> / 
+<b>Uitvoer:</b> er werd een nieuwe (lege) gelinkte lijst aangemaakt.
+```bash
+function GelinkteLijst
+    eerste <- null
+end function
+```
+
+### Opzoeken van een element x
+
+<b>Invoer:</b> De gelinkte lijst werd aangemaakt,𝑥is het te zoeken element.
+<b>Uitvoer:</b> De referentie naar de eerste knoop met dataveld gelijk aan𝑥werd geretourneerd, indien𝑥niet voorkomt in de lijst werd dereferentie null geretourneerd.
+```bash
+function zoek(x)
+    ref <- eerste
+    while ref != null and ref.data != x do
+        ref <- ref.volgende
+    return ref
+end function
+```
+
+### Tijdscomplexiteit van `zoek`
