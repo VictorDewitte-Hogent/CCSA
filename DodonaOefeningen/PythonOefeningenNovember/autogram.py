@@ -1,0 +1,2 @@
+def letterfrequenties(a):
+    
